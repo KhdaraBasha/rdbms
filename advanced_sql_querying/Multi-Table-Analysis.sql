@@ -212,7 +212,15 @@ order by e1.employee_name
 ;
 
 --	Employees that have a greater salary
-
+select 
+	e1.employee_name, e1.salary,
+	e2.employee_name, e2.salary
+from employees as e1
+inner join employees as e2
+	on e1.salary > e2.salary
+--where e1.employee_id > e2.employee_id
+order by e1.employee_name
+;
 
 --	Employee and their managers
 select m.employee_id, m.employee_name, m.manager_id, e.employee_name as manager_name
@@ -221,16 +229,106 @@ left join employees as e
 on e.employee_id = m.manager_id
 ;
 
-
 --	************************
 --	ASSIGNMENT 2: Self Joins
 --	************************
 -- Which products are within 25 cents of each other in terms of unit price?
 
 -- View the products table
-
+select * from products p limit 100;
 
 -- Join the products table with itself so each candy is paired with a different candy
-
-        
 -- Calculate the price difference, do a self join, and then return only price differences under 25 cents
+select
+	p1.product_id, p1.product_name, p1.unit_price, p2.product_id, p2.product_name, p2.unit_price, abs(p1.unit_price - p2.unit_price) as diff_unit_price
+from products p1
+inner join products p2 
+on p1.product_id != p2.product_id
+and abs(p1.unit_price - p2.unit_price) < 0.25
+and p1.product_name < p2.product_name 
+order by p1.product_id asc
+;
+        
+--	***************************
+-- 	6. CROSS JOIN
+--	***************************
+--	A cross join returns all combinations of rows within two or more tables
+
+--	TOPS TABLE
+create table tops 
+	(
+		id INT,
+		item VARCHAR(50)
+	)
+;
+insert into tops (id, item)
+values
+	(1, 'T-Shirt'),
+	(2, 'Hoodie')
+;
+--	SIZES TABLE
+create table sizes
+	(
+		id INT,
+		size VARCHAR(50)
+	)
+;
+insert into sizes (id, size)
+values
+	(101, 'Small'),
+	(102, 'Medium'),
+	(103, 'Large')
+;
+--	OUTERWEAR
+create table outerwear 
+	(
+		id INT,
+		item VARCHAR(50)
+	)
+;
+insert into outerwear 
+values
+	(2, 'Hoodie'),
+	(3, 'Jacket'),
+	(4, 'Coat')
+;
+
+--	View the tables
+select * from tops;
+select * from sizes;
+select * from outerwear;
+
+--	Cross join the tables
+select *
+from tops
+cross join sizes
+;
+
+-- Calculate the price difference, do a self join, and then return only price differences under 25 cents
+select
+	p1.product_id, p1.product_name, p1.unit_price, p2.product_id, p2.product_name, p2.unit_price, abs(p1.unit_price - p2.unit_price) as diff_unit_price
+from products p1
+cross join products p2 
+where p1.product_id != p2.product_id 
+and abs(p1.unit_price - p2.unit_price) < 0.25
+and p1.product_name < p2.product_name 
+order by p1.product_id asc
+;
+
+--	***************************
+-- 	7. UNION and UNION ALL
+--	***************************
+--	Use a UNION to stack multiple tables or queries on top of one another
+--		1. UNION removes duplicate values, while UNION ALL retains them
+
+--	UNION
+select * from tops
+union 
+select * from outerwear
+;
+
+--	UNION ALL
+select * from tops
+union all
+select * from outerwear
+;
