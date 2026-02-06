@@ -1,0 +1,17 @@
+# Ignore data files and .env files uploading to git repository
+
+.env
+*.env
+# Ignore Windows batch files
+*.bat
+# Ignore secrets and config files
+config_loacl.py
+Secrets.json
+# Ignore Python cache files
+__pycache__/
+*.pyc
+# Ignore CSV, Excel, log files and data directory
+*.csv
+*.xlsx
+*.log
+data/
