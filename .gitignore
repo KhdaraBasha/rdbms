@@ -15,3 +15,10 @@ __pycache__/
 *.xlsx
 *.log
 data/
+*.pdf
+*.zip
+*.tar
+*.gz
+# Ignore MacOSX system files
+**/__MACOSX/
+**/Course_Materials/
